@@ -1,0 +1,42 @@
+:root {
+    /* Brand Colors - Appetizing Orange */
+    --bs-primary: #FF6B35;
+    --bs-primary-rgb: 255, 107, 53;
+    --bs-secondary: #2EC4B6;
+    --bs-secondary-rgb: 46, 196, 182;
+
+    /* Custom Variables */
+    --primary-100: #FFF0EB;
+    --primary-500: #FF6B35;
+    --primary-600: #E85D2A;
+
+    /* Base Theme Variables */
+    --bg-app: #F8F9FA;
+    /* Bootstrap gray-100 */
+    --bg-card: #FFFFFF;
+    --text-main: #212529;
+    /* Bootstrap gray-900 */
+    --text-muted: #6C757D;
+    /* Bootstrap gray-600 */
+    --border-color: #DEE2E6;
+    /* Bootstrap gray-300 */
+}
+
+/* Dark Mode Overrides */
+[data-bs-theme='dark'] {
+    --bg-app: #212529;
+    /* Bootstrap gray-900 */
+    --bg-card: #2C3035;
+    /* Custom dark card */
+    --text-main: #F8F9FA;
+    --text-muted: #ADB5BD;
+    /* Bootstrap gray-500 */
+    --border-color: #495057;
+    /* Bootstrap gray-700 */
+
+    /* Bootstrap Var Overrides for Dark Mode */
+    --bs-body-bg: var(--bg-app);
+    --bs-body-color: var(--text-main);
+    --bs-card-bg: var(--bg-card);
+    --bs-card-border-color: var(--border-color);
+}
