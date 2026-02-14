@@ -19,7 +19,7 @@ export function Recipes() {
     return matchesSearch && matchesCategory;
   });
 
-  return (
+  return (<>
     <div className="container py-4 animate-fade-in">
       <div className="d-flex flex-column gap-3 mb-4">
         <div className="d-flex justify-content-between align-items-center">
@@ -67,12 +67,14 @@ export function Recipes() {
         ))}
       </div>
 
-      {isModalOpen && (
-        <AddRecipeModal
-          onClose={() => setIsModalOpen(false)}
-          onAdd={addRecipe}
-        />
-      )}
+
     </div>
+    {isModalOpen && (
+      <AddRecipeModal
+        onClose={() => setIsModalOpen(false)}
+        onAdd={addRecipe}
+      />
+    )}
+  </>
   );
 }
