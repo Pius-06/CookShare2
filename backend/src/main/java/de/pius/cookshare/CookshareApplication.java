@@ -8,6 +8,7 @@ public class CookshareApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CookshareApplication.class, args);
+		System.out.println("Hello World!");
 	}
 
 }
