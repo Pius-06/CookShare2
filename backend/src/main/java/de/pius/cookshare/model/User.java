@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.ManyToAny;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
@@ -15,13 +14,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-import de.pius.cookshare.model.Role;
 
 @Entity
 public class User {
@@ -30,61 +29,236 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(min = 4, max = 20)
-    @Column(unique = true)
+    @Column(length = 20, unique = true, nullable = false)
     private String username;
 
-    @NotBlank
-    @Size(min = 1, max = 200)
-    @Pattern(regexp="[^0-9]")
+    @Column(length = 200, nullable = false)
     private String firstname;
 
-    @NotBlank
-    @Size(min = 1, max = 200)
-    @Pattern(regexp="[^0-9]+$")
+    @Column(length = 200, nullable = false)
     private String lastname;
 
-    @NotBlank
-    @Email
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @NotBlank
-    @Size(min = 8, max = 200)
-    @Pattern(regexp = """
-            ((?=.*[A-Z]){1}
-            (?=.*[0-9]){1}
-            (?=.*[!@#$%^&*]){1}
-            ).+$""")
-    // ^: Präfix
-    // $: Ende des Strings
-    // ?=.*: Der String muss irgendwo das Pattern enthalten (?=PATTERN)
-    // .* = beliebige Zeichen, 0 oder mehr
+    @Column(nullable = false)
     private String password;
 
-    @Size(max=500)
+    @Column(length = 200)
     private String bio;
 
-    @NotNull
+    @Column(updatable = false, nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @NotNull
-    @UpdateTimestamp
-    private LocalDateTime lastLoggin;
+    private LocalDateTime lastLogin;
 
-    @NotBlank
+    @Column(nullable = false)
     private boolean isActive;
 
-    @NotBlank
+    @Column(nullable = false)
     private int failedLoginAttemps;
 
-    @ManyToAny
+    @ManyToMany
     @JoinTable(
-        name="user_roles",
-        joinColumns = @JoinColumn(name = "user_id"),
+        name = "user_roles", 
+        joinColumns = @JoinColumn(name = "user_id"), 
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "user_follows", 
+        joinColumns = @JoinColumn(name = "follower_id"), 
+        inverseJoinColumns = @JoinColumn(name = "followed_id")
+    )
+    private Set<User> followers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "following")
+    private Set<User> following = new HashSet<>();
+
+    @Transient
+    private int countFollowers;
+
+    @Transient
+    private int countFollowing;
+
+    public User() {
+    }
+
+    public User(Long id,
+            String username,
+            String firstname,
+            String lastname,
+            String email,
+            String password,
+            String bio,
+            LocalDateTime createdAt,
+            LocalDateTime lastLoggin,
+            boolean isActive,
+            int failedLoginAttemps,
+            Set<Role> roles,
+            Set<User> followers,
+            Set<User> following) {
+        this.id = id;
+        this.username = username;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.bio = bio;
+        this.createdAt = createdAt;
+        this.lastLogin = lastLoggin;
+        this.isActive = isActive;
+        this.failedLoginAttemps = failedLoginAttemps;
+        this.roles = roles;
+        this.followers = followers;
+        this.following = following;
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id +
+                ", username=" + username +
+                ", firstname=" + firstname +
+                ", lastname=" + lastname +
+                ", email=" + email +
+                ", password=" + password +
+                ", bio=" + bio +
+                ", createdAt=" + createdAt +
+                ", lastLoggin=" + lastLogin +
+                ", isActive=" + isActive +
+                ", failedLoginAttemps=" + failedLoginAttemps +
+                ", roles=" + roles +
+                ", followers=" + followers +
+                ", following=" + following +
+                ", countFollowers=" + countFollowers +
+                ", countFollowing=" + countFollowing
+                + "]";
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public int getFailedLoginAttemps() {
+        return failedLoginAttemps;
+    }
+
+    public void setFailedLoginAttemps(int failedLoginAttemps) {
+        this.failedLoginAttemps = failedLoginAttemps;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Set<User> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<User> followers) {
+        this.followers = followers;
+    }
+
+    public Set<User> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Set<User> following) {
+        this.following = following;
+    }
+
+    public int getCountFollowers() {
+        if (followers == null)
+            return 0;
+        return followers.size();
+    }
+
+    public int getCountFollowing() {
+        if (following == null)
+            return 0;
+        return following.size();
+    }
 }
