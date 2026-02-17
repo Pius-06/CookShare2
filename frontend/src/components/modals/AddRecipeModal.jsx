@@ -15,6 +15,11 @@ export function AddRecipeModal({ onClose, onAdd, initialData = null }) {
         ingredients: []
     });
 
+    const [durationInput, setDurationInput] = useState({
+        amount: '',
+        unit: 'min'
+    });
+
     const [ingredientInput, setIngredientInput] = useState({
         amount: '',
         unit: 'g',
@@ -105,22 +110,38 @@ export function AddRecipeModal({ onClose, onAdd, initialData = null }) {
                             </div>
 
                             <div className="row g-3 mb-3">
-                                <div className="col-6">
+                                <div className="col-7">
                                     <label className="form-label fw-semibold">Time</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="e.g. 30 min"
-                                        value={formData.time}
-                                        onChange={e => setFormData({ ...formData, time: e.target.value })}
-                                    />
+                                    <div className="row g-2">
+                                        <div className="col-7">
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                className="form-control"
+                                                placeholder="e.g. 30"
+                                                value={durationInput.amount}
+                                                onChange={e => setDurationInput({ ...durationInput, amount: e.target.value })}
+                                            />
+                                        </div>
+                                        <div className="col-5">
+                                            <select
+                                                className="form-select"
+                                                value={durationInput.unit}
+                                                onChange={e => setDurationInput({ ...durationInput, unit: e.target.value })}
+                                            >
+                                                <option value="min">min</option>
+                                                <option value="h">h</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-6">
+                                <div className="col-5">
                                     <label className="form-label fw-semibold">Servings</label>
                                     <input
-                                        type="text"
+                                        type="number"
+                                        min="1"
                                         className="form-control"
-                                        placeholder="e.g. 2 ppl"
+                                        placeholder="e.g. 2"
                                         value={formData.servings}
                                         onChange={e => setFormData({ ...formData, servings: e.target.value })}
                                     />
