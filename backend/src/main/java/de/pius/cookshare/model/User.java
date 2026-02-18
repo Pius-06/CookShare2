@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,16 +15,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 @Entity
 public class User {
-
+    // TODO: Profileimage
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -60,23 +57,20 @@ public class User {
     private int failedLoginAttemps;
 
     @ManyToMany
-    @JoinTable(
-        name = "user_roles", 
-        joinColumns = @JoinColumn(name = "user_id"), 
-        inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(
-        name = "user_follows", 
-        joinColumns = @JoinColumn(name = "follower_id"), 
-        inverseJoinColumns = @JoinColumn(name = "followed_id")
-    )
+    @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
     private Set<User> followers = new HashSet<>();
 
     @ManyToMany(mappedBy = "following")
     private Set<User> following = new HashSet<>();
+
+    @OneToOne(cascade = CascadeType.ALL, // Operationen am Parent werden automatisch auf das Child angewendet
+            orphanRemoval = true // Wenn die Beziehung entfernt wird, wird das Child gelöscht
+    )
+    private Image profilImage;
 
     @Transient
     private int countFollowers;
@@ -84,10 +78,18 @@ public class User {
     @Transient
     private int countFollowing;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Recipe> ownRecipes = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_recipe", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "recipe_id"))
+    private Set<Recipe> likedRecipes = new HashSet<>();
+
     public User() {
     }
 
-    public User(Long id,
+    public User(
+            Long id,
             String username,
             String firstname,
             String lastname,
@@ -100,7 +102,9 @@ public class User {
             int failedLoginAttemps,
             Set<Role> roles,
             Set<User> followers,
-            Set<User> following) {
+            Set<User> following,
+            Set<Recipe> ownRecipes,
+            Set<Recipe> likedRecipes) {
         this.id = id;
         this.username = username;
         this.firstname = firstname;
@@ -115,6 +119,8 @@ public class User {
         this.roles = roles;
         this.followers = followers;
         this.following = following;
+        this.ownRecipes = ownRecipes;
+        this.likedRecipes = likedRecipes;
     }
 
     @Override
@@ -140,10 +146,6 @@ public class User {
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -198,10 +200,6 @@ public class User {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public LocalDateTime getLastLogin() {
         return lastLogin;
     }
@@ -250,6 +248,14 @@ public class User {
         this.following = following;
     }
 
+    public Image getProfilImage() {
+        return profilImage;
+    }
+
+    public void setProfilImage(Image profilImage) {
+        this.profilImage = profilImage;
+    }
+
     public int getCountFollowers() {
         if (followers == null)
             return 0;
@@ -260,5 +266,21 @@ public class User {
         if (following == null)
             return 0;
         return following.size();
+    }
+
+    public Set<Recipe> getOwnRecipes() {
+        return ownRecipes;
+    }
+
+    public void setOwnRecipes(Set<Recipe> ownRecipes) {
+        this.ownRecipes = ownRecipes;
+    }
+
+    public Set<Recipe> getLikedRecipes() {
+        return likedRecipes;
+    }
+
+    public void setLikedRecipes(Set<Recipe> likedRecipes) {
+        this.likedRecipes = likedRecipes;
     }
 }
