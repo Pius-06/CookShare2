@@ -1,0 +1,45 @@
+### Maven ###
+- mvn clean	              Alte Build-Dateien löschen
+- mvn compile	          Quellcode kompilieren
+- mvn test	              Tests ausführen
+- mvn package	          JAR/WAR erzeugen
+- mvn install	          Artefakt lokal installieren (für andere Projekte)
+- mvn dependency:tree     Zeigt alle Abhängigkeiten des Projekts
+
+Definition: 
+Maven ist ein Build- und Projektmanagement-Tool für Java, das den Build-Prozess, Abhängigkeiten, Plugins und die 
+Projektstruktur standardisiert. 
+Maven ist im Team wichtig, weil es sicherstellt, dass alle Entwickler mit denselben Abhängigkeiten und Versionen 
+arbeiten und das Projekt auf allen Rechnern gleich gebaut und ausgeführt werden kann.
+
+- Abhängigkeiten (Dependencies): Es sind fremde Bibliotheken die nicht im JDK enthalten sind, die dein Projekt benötigt, 
+um zu funktionieren. Z.B.: import org.junit.Test;
+    - JDK → liefert java.*
+    - Maven → liefert org.*, com.*, net.*
+
+- Build-Prozess: Der Build-Prozess ist die automatische Abfolge von Schritten, um aus Quellcode ein lauffähiges Programm 
+zu machen.
+
+- Plugins: Plugins erweitern Maven um konkrete Funktionen. Sie führen die einzelnen Schritte des Build-Prozesses aus, 
+wie Kompilieren oder Testen.
+    - maven-compiler-plugin → kompiliert Java
+    - maven-surefire-plugin → führt Tests aus
+
+- JAR: Eine JAR-Datei ist ein Archiv, das kompilierte Java-Klassen und Ressourcen enthält und als Bibliothek oder 
+ausführbare Anwendung genutzt wird.
+- Eigene Bibliotheken: Man kann eine eigene Bibliothek als JAR erstellen, diese mit Maven installieren oder in ein 
+Repository hochladen und dann in anderen Projekten als Abhängigkeit einbinden und wie jede andere Library importieren.
+
+-pom.xml: 
+
+
+### Git ###
+git log --oneline --graph:
+- Zeigt den Verlauf des aktuellen Branches und inklusive aller Commits aus Branches, die in ihn gemergt wurden.
+- mit --all werden alle Branches gezeigt auch die mit denen der BRanch nicht gemerget wurde.
+
+q: 
+- exit
+
+HEAD:
+- HEAD ist ein Zeiger auf den Commit, auf dem du gerade arbeitest.

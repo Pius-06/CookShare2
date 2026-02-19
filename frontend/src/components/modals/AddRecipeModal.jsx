@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Save } from 'lucide-react';
+import { X, Plus, Save, Trash2 } from 'lucide-react';
 
 export function AddRecipeModal({ onClose, onAdd, initialData = null }) {
     const [formData, setFormData] = useState({
@@ -7,11 +7,22 @@ export function AddRecipeModal({ onClose, onAdd, initialData = null }) {
         description: '',
         introduction: '',
         image: '',
-        time: '',
-        servings: '',
+        servings: '1',
         category: 'Dinner',
         difficulty: 'Medium',
-        isPublic: true
+        isPublic: true,
+        ingredients: [],
+        duration: {
+            amount: '',
+            unit: 'min'
+        }
+    });
+
+
+    const [ingredientInput, setIngredientInput] = useState({
+        amount: '',
+        unit: 'g',
+        ingredient: ''
     });
 
     useEffect(() => {
@@ -19,6 +30,36 @@ export function AddRecipeModal({ onClose, onAdd, initialData = null }) {
             setFormData(initialData);
         }
     }, [initialData]);
+
+    const handleAddIngredient = () => {
+        if (!ingredientInput.amount || !ingredientInput.unit || !ingredientInput.ingredient) {
+            alert('Bitte Menge und Zutat ausfüllen');
+            return;
+        }
+
+        setFormData({
+            ...formData,
+            ingredients: [...formData.ingredients,
+            {
+                amount: ingredientInput.amount,
+                unit: ingredientInput.unit,
+                ingredient: ingredientInput.ingredient
+            }
+            ]
+        });
+        setIngredientInput({
+            amount: '',
+            unit: 'g',
+            ingredient: ''
+        });
+    };
+
+    const handleRemoveIngredient = (index) => {
+        setFormData({
+            ...formData,
+            ingredients: formData.ingredients.filter((_, i) => i !== index)
+        });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -73,22 +114,54 @@ export function AddRecipeModal({ onClose, onAdd, initialData = null }) {
                             </div>
 
                             <div className="row g-3 mb-3">
-                                <div className="col-6">
+                                <div className="col-7">
                                     <label className="form-label fw-semibold">Time</label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="e.g. 30 min"
-                                        value={formData.time}
-                                        onChange={e => setFormData({ ...formData, time: e.target.value })}
-                                    />
+                                    <div className="row g-2">
+                                        <div className="col-7">
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                className="form-control"
+                                                placeholder="e.g. 30"
+                                                value={formData.duration.amount}
+                                                onChange={e =>
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        duration: {
+                                                            ...prev.duration,
+                                                            amount: e.target.value
+                                                        }
+                                                    }))
+                                                }
+                                            />
+                                        </div>
+                                        <div className="col-5">
+                                            <select
+                                                className="form-select"
+                                                value={formData.duration.unit}
+                                                onChange={e =>
+                                                    setFormData(prev => ({
+                                                        ...prev,
+                                                        duration: {
+                                                            ...prev.duration,
+                                                            unit: e.target.value
+                                                        }
+                                                    }))
+                                                }
+                                            >
+                                                <option value="min">min</option>
+                                                <option value="h">h</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="col-6">
+                                <div className="col-5">
                                     <label className="form-label fw-semibold">Servings</label>
                                     <input
-                                        type="text"
+                                        type="number"
+                                        min="1"
                                         className="form-control"
-                                        placeholder="e.g. 2 ppl"
+                                        placeholder="e.g. 2"
                                         value={formData.servings}
                                         onChange={e => setFormData({ ...formData, servings: e.target.value })}
                                     />
@@ -102,8 +175,78 @@ export function AddRecipeModal({ onClose, onAdd, initialData = null }) {
                                     rows="2"
                                     placeholder="Catchy hook about the recipe..."
                                     value={formData.introduction}
-                                    onChange={e => setFormData({ ...formData, introduction: e.target.value })}
+                                    onChange={e => setFormData({
+                                        ...formData,
+                                        introduction: e.target.value
+                                    })}
                                 />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label fw-semibold">Zutaten</label>
+                                <div className="row g-2 mb-2">
+                                    <div className="col-3">
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            className="form-control"
+                                            placeholder="Menge"
+                                            value={ingredientInput.amount}
+                                            onChange={e => setIngredientInput({ ...ingredientInput, amount: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="col-3">
+                                        <select
+                                            className="form-select"
+                                            value={ingredientInput.unit}
+                                            onChange={e => setIngredientInput({ ...ingredientInput, unit: e.target.value })}
+                                        >
+                                            <option value="g">g</option>
+                                            <option value="ml">ml</option>
+                                            <option value="TL">TL</option>
+                                            <option value="EL">EL</option>
+                                            <option value="Stück">Stück</option>
+                                            <option value="Prise">Prise</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-6">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="z.B. Nudeln"
+                                            value={ingredientInput.ingredient}
+                                            onChange={e => setIngredientInput({ ...ingredientInput, ingredient: e.target.value })}
+                                        />
+                                    </div>
+
+                                </div>
+                                <div className="col-12 mb-2">
+                                    <button
+                                        type="button"
+                                        className="btn btn-success w-100 d-flex align-items-center justify-content-center"
+                                        onClick={handleAddIngredient}
+                                    >
+                                        <Plus size={18} />
+                                    </button>
+                                </div>
+                                {formData.ingredients.length > 0 && (
+                                    <div className="list-group">
+                                        {formData.ingredients.map((ingredient, index) => (
+                                            <div key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                                                <span>
+                                                    <strong>{ingredient.amount}{ingredient.unit}</strong> {ingredient.ingredient}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-sm btn-danger d-flex align-items-center justify-content-center"
+                                                    onClick={() => handleRemoveIngredient(index)}
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="row g-3 mb-3">
