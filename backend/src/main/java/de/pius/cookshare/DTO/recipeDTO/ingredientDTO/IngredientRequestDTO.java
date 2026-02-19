@@ -1,11 +1,15 @@
 package de.pius.cookshare.DTO.recipeDTO.ingredientDTO;
 
 import de.pius.cookshare.types.IngredientUnit;
+
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CreateIngredientRequest(
+public record IngredientRequestDTO(
+
+    @Min(value = 1, message = "Ingredient amount must be at least 1")
     int amount,
 
     @NotNull(message = "Unit can not be empty")

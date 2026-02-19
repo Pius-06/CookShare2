@@ -3,17 +3,18 @@ package de.pius.cookshare.DTO.recipeDTO;
 import java.util.Set;
 
 import de.pius.cookshare.DTO.image.CreateImageRequest;
-import de.pius.cookshare.DTO.recipeDTO.CookDurationDTO.CreateCookDurationRequestDTO;
-import de.pius.cookshare.DTO.recipeDTO.ingredientDTO.CreateIngredientRequest;
+import de.pius.cookshare.DTO.recipeDTO.CookDurationDTO.CookDurationRequestDTO;
+import de.pius.cookshare.DTO.recipeDTO.ingredientDTO.IngredientRequestDTO;
 import de.pius.cookshare.types.Category;
 import de.pius.cookshare.types.Difficulty;
+
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record CreateRecipeRequestDTO(
+public record RecipeRequestDTO(
     
     @NotNull(message = "Author ID can not be empty")
     Long authorId,
@@ -33,10 +34,10 @@ public record CreateRecipeRequestDTO(
     CreateImageRequest recipeImage,
 
     @NotNull(message = "Duration can not be empty")
-    CreateCookDurationRequestDTO duration,
+    CookDurationRequestDTO duration,
 
     @NotEmpty(message = "Ingredient list must not be empty")
-    Set<CreateIngredientRequest> ingredients,
+    Set<IngredientRequestDTO> ingredients,
 
     @Min(value=1, message="Servings must be at least 1")
     int servings,
