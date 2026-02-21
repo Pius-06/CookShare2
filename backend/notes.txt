@@ -43,3 +43,27 @@ q:
 
 HEAD:
 - HEAD ist ein Zeiger auf den Commit, auf dem du gerade arbeitest.
+
+.java → Compiler → .class → JVM → Programm läuft
+
+Was steht in einer .class-Datei?
+- Java Bytecode
+- Methoden
+- Felder
+- Typinformationen
+- Annotationen
+- Metadaten für JVM & Frameworks
+- ➡️ Die JVM führt .class-Dateien aus, nicht .java
+
+Warum .class und nicht .java?
+- Zur Laufzeit existieren keine .java-Dateien mehr.
+- Spring sieht niemals .java, sondern nur .class-Dateien
+- .java  = Bauplan (Papier)
+- .class = echtes Bauteil (Maschine)
+
+Was ist Person.class?
+- Es ist ein Objekt vom Typ Class<Person>
+- Class<Person> clazz = Person.class;
+
+Wann verwendet man .class?
+- Immer dann, wenn du die Klasse selbst meinst – nicht ein Objekt
