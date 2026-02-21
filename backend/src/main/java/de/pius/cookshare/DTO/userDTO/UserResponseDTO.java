@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 
 import de.pius.cookshare.DTO.recipeDTO.RecipeResponseDTO;
 import de.pius.cookshare.model.User;
+import lombok.Builder;
 
+@Builder
 public record UserResponseDTO(
         Long id,
 
