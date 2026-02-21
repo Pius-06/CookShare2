@@ -10,6 +10,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString() 
 @Entity
 public class Image {
 
@@ -31,63 +44,4 @@ public class Image {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    public Image() {
-    }
-
-    public Image(
-            Long id,
-            String path,
-            String originalName,
-            String contentType,
-            long size,
-            LocalDateTime createdAt) {
-        this.id = id;
-        this.path = path;
-        this.originalName = originalName;
-        this.contentType = contentType;
-        this.size = size;
-        this.createdAt = createdAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
 }
