@@ -2,8 +2,8 @@ package de.pius.cookshare.DTO.recipeDTO;
 
 import java.util.Set;
 
-import de.pius.cookshare.DTO.image.CreateImageRequest;
-import de.pius.cookshare.DTO.recipeDTO.CookDurationDTO.CookDurationRequestDTO;
+import de.pius.cookshare.DTO.image.ImageRequestDTO;
+import de.pius.cookshare.DTO.recipeDTO.cookDurationDTO.CookDurationRequestDTO;
 import de.pius.cookshare.DTO.recipeDTO.ingredientDTO.IngredientRequestDTO;
 import de.pius.cookshare.types.Category;
 import de.pius.cookshare.types.Difficulty;
@@ -16,7 +16,7 @@ import jakarta.validation.constraints.Size;
 
 public record RecipeRequestDTO(
     
-    @NotNull(message = "Author ID can not be empty")
+    @NotNull(message = "Author id can not be empty")
     Long authorId,
     
     @NotBlank(message = "Title can not be empty")
@@ -31,7 +31,7 @@ public record RecipeRequestDTO(
     @Size(max = 2000, message = "Preparation can only be a maximum of 2000 letters long")
     String preparation,
 
-    CreateImageRequest recipeImage,
+    ImageRequestDTO recipeImage,
 
     @NotNull(message = "Duration can not be empty")
     CookDurationRequestDTO duration,

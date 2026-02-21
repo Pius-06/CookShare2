@@ -1,11 +1,25 @@
 package de.pius.cookshare.model;
 
 import de.pius.cookshare.types.DurationUnit;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString() 
 @Embeddable // Klasse bekommt keine eigene Tabelle sondern, sondern ihre Felder direkt in der Tabelle der verwendenden 
 // Entität gespeichert werden.
 public class CookDuration {
@@ -17,27 +31,8 @@ public class CookDuration {
     @Enumerated(EnumType.STRING)
     private DurationUnit unit;
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public DurationUnit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(DurationUnit unit) {
-        this.unit = unit;
-    }
-
-    public CookDuration(int amount, DurationUnit unit) {
-        this.amount = amount;
-        this.unit = unit;
-    }
-
-    public CookDuration() {
+    public static Object stream() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'stream'");
     }
 }

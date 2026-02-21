@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import de.pius.cookshare.model.Ingredient;
 import de.pius.cookshare.types.IngredientUnit;
 
-public record IngridientResponseDTO(
+public record IngredientResponseDTO(
 
         int amount,
 
@@ -14,14 +14,14 @@ public record IngridientResponseDTO(
 
         String name) {
 
-    public static IngridientResponseDTO from(Ingredient ingredient) {
-        return new IngridientResponseDTO(
+    public static IngredientResponseDTO from(Ingredient ingredient) {
+        return new IngredientResponseDTO(
                 ingredient.getAmount(),
                 ingredient.getUnit(),
                 ingredient.getName());
     }
 
-    public static Set<IngridientResponseDTO> from(Set<Ingredient> ingredients) {
+    public static Set<IngredientResponseDTO> from(Set<Ingredient> ingredients) {
         return ingredients.stream()
                 .map(ingredient -> from(ingredient))
                 .collect(Collectors.toSet());

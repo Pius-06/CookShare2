@@ -4,14 +4,18 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.pius.cookshare.DTO.recipeDTO.ingredientDTO.IngredientResponseDTO;
+import de.pius.cookshare.DTO.userDTO.UserResponseDTO;
 import de.pius.cookshare.model.CookDuration;
-import de.pius.cookshare.model.Ingredient;
 import de.pius.cookshare.model.Recipe;
-import de.pius.cookshare.model.User;
 import de.pius.cookshare.types.Category;
 import de.pius.cookshare.types.Difficulty;
 
+import lombok.Builder;
+
+@Builder
 public record RecipeResponseDTO(
+
         Long id,
 
         String titel,
@@ -22,7 +26,7 @@ public record RecipeResponseDTO(
 
         CookDuration duration,
 
-        Set<Ingredient> ingredients,
+        Set<IngredientResponseDTO> ingredients,
 
         int servings,
 
@@ -32,7 +36,7 @@ public record RecipeResponseDTO(
 
         boolean isPublic,
 
-        User author,
+        UserResponseDTO author,
 
         int countLikes,
 
@@ -45,12 +49,12 @@ public record RecipeResponseDTO(
                 recipe.getIntroduction(),
                 recipe.getPreparation(),
                 recipe.getDuration(),
-                recipe.getIngridients(),
+                IngredientResponseDTO.from(recipe.getIngridients()),
                 recipe.getServings(),
                 recipe.getCategory(),
                 recipe.getDifficulty(),
                 recipe.isPublic(),
-                recipe.getAuthor(),
+                UserResponseDTO.from(recipe.getAuthor()),
                 recipe.getCountLikes(),
                 recipe.getCreatedAt());
     }

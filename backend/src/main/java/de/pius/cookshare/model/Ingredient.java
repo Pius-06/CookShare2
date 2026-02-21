@@ -9,6 +9,19 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString() 
 @Entity
 public class Ingredient {
 
@@ -25,46 +38,4 @@ public class Ingredient {
 
     @Column(nullable = false, length = 50)
     private String name;
-
-    public Ingredient() {
-    }
-
-    public Ingredient(
-            Long id,
-            int amount,
-            IngredientUnit unit,
-            String name) {
-        this.id = id;
-        this.amount = amount;
-        this.unit = unit;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public IngredientUnit getUnit() {
-        return unit;
-    }
-
-    public void setUnit(IngredientUnit unit) {
-        this.unit = unit;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
