@@ -3,8 +3,8 @@ package de.pius.cookshare.mapper;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.pius.cookshare.DTO.recipeDTO.RecipeRequestDTO;
-import de.pius.cookshare.model.Recipe;
+import de.pius.cookshare.dto.recipe.RecipeRequestDTO;
+import de.pius.cookshare.model.recipe.Recipe;
 
 public class RecipeMapper {
 
@@ -16,7 +16,7 @@ public class RecipeMapper {
                 .preparation(dto.preparation())
                 .recipeImage(ImageMapper.toImage(dto.recipeImage()))
                 .duration(CookDurationMapper.toCookDuration(dto.duration()))
-                .ingridients(IngredientMapper.toIngredient(dto.ingredients()))
+                .ingredients(IngredientMapper.toIngredient(dto.ingredients()))
                 .servings(dto.servings())
                 .category(dto.category())
                 .difficulty(dto.difficulty())
