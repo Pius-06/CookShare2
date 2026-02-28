@@ -1,13 +1,18 @@
-package de.pius.cookshare.model;
+package de.pius.cookshare.model.user;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import de.pius.cookshare.model.Image;
+import de.pius.cookshare.model.recipe.Recipe;
+import de.pius.cookshare.types.RoleName;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,6 +22,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +36,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "password")  // password wird ausgeschlossen
+@ToString(exclude = { "password", "verificationToken" }) // password wird ausgeschlossen
 public class User {
     // TODO: Profileimage
     @Id
@@ -62,21 +68,24 @@ public class User {
     private LocalDateTime lastLogin;
 
     @Column(nullable = false)
-    private boolean isActive;
+    @Builder.Default
+    private boolean isActive = false;
 
     @Column(nullable = false)
-    private int failedLoginAttemps;
+    @Builder.Default
+    private int failedLoginAttemps = 0;
 
-    @ManyToMany
-    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private RoleName role = RoleName.USER;
 
     @ManyToMany
     @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
-    private Set<User> followers;
+    private Set<User> following;
 
     @ManyToMany(mappedBy = "following")
-    private Set<User> following;
+    private Set<User> followers;
 
     @OneToOne(cascade = CascadeType.ALL, // Operationen am Parent werden automatisch auf das Child angewendet
             orphanRemoval = true // Wenn die Beziehung entfernt wird, wird das Child gelöscht
@@ -89,12 +98,17 @@ public class User {
     @Transient
     private int countFollowing;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private Set<Recipe> ownRecipes;
 
     @ManyToMany
     @JoinTable(name = "user_recipe", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "recipe_id"))
     private Set<Recipe> likedRecipes;
+
+    @OneToOne(mappedBy = "user", 
+    cascade = CascadeType.ALL,
+        orphanRemoval = true)
+    private VerificationToken verificationToken;
 
     public int getCountFollowers() {
         if (followers == null)

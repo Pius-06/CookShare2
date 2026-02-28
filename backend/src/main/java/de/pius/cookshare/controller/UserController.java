@@ -8,8 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.pius.cookshare.DTO.userDTO.UserRequestDTO;
-import de.pius.cookshare.DTO.userDTO.UserResponseDTO;
+import de.pius.cookshare.dto.auth.RegisterRequestDTO;
+import de.pius.cookshare.dto.user.UserRequestDTO;
+import de.pius.cookshare.dto.user.UserResponseDTO;
 import de.pius.cookshare.service.UserService;
 import jakarta.validation.Valid;
 
@@ -47,7 +48,7 @@ public class UserController {
 
     @PostMapping("/")
     public ResponseEntity<UserResponseDTO> createUser(
-            @Valid @RequestBody UserRequestDTO userData) {
+            @Valid @RequestBody RegisterRequestDTO userData) {
 
         UserResponseDTO user = UserResponseDTO.from(userService.createUser(userData));
         return new ResponseEntity<UserResponseDTO>(user, HttpStatus.CREATED);

@@ -1,4 +1,4 @@
-package de.pius.cookshare.DTO.recipeDTO.cookDurationDTO;
+package de.pius.cookshare.dto.recipe.cookDurationDTO;
 
 import de.pius.cookshare.types.DurationUnit;
 import jakarta.validation.constraints.Min;

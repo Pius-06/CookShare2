@@ -1,13 +1,13 @@
-package de.pius.cookshare.DTO.recipeDTO;
+package de.pius.cookshare.dto.recipe;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.pius.cookshare.DTO.recipeDTO.ingredientDTO.IngredientResponseDTO;
-import de.pius.cookshare.DTO.userDTO.UserResponseDTO;
-import de.pius.cookshare.model.CookDuration;
-import de.pius.cookshare.model.Recipe;
+import de.pius.cookshare.dto.recipe.ingredientDTO.IngredientResponseDTO;
+import de.pius.cookshare.dto.user.UserResponseDTO;
+import de.pius.cookshare.model.recipe.CookDuration;
+import de.pius.cookshare.model.recipe.Recipe;
 import de.pius.cookshare.types.Category;
 import de.pius.cookshare.types.Difficulty;
 
@@ -49,7 +49,7 @@ public record RecipeResponseDTO(
                 recipe.getIntroduction(),
                 recipe.getPreparation(),
                 recipe.getDuration(),
-                IngredientResponseDTO.from(recipe.getIngridients()),
+                IngredientResponseDTO.from(recipe.getIngredients()),
                 recipe.getServings(),
                 recipe.getCategory(),
                 recipe.getDifficulty(),

@@ -1,6 +1,6 @@
-package de.pius.cookshare.DTO.recipeDTO.cookDurationDTO;
+package de.pius.cookshare.dto.recipe.cookDurationDTO;
 
-import de.pius.cookshare.model.CookDuration;
+import de.pius.cookshare.model.recipe.CookDuration;
 import de.pius.cookshare.types.DurationUnit;
 
 public record CookDurationResponseDTO(
