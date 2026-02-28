@@ -1,12 +1,13 @@
 package de.pius.cookshare.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import de.pius.cookshare.model.User;
+import de.pius.cookshare.model.user.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -14,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             SELECT u
             FROM User u
             WHERE u.email = ?1
-            """) // SQL != JPQL
+            """)
     Optional<User> findUserByEmail(String email);
 
     @Query("""
@@ -56,4 +57,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
             WHERE u.id = ?1
             """)
     boolean existsById(Long id);
+
+    @Query("""
+                SELECT u
+                FROM User u
+                WHERE u.isActive = false
+                AND u.verificationToken.used = false
+                AND u.verificationToken.expiresAt < CURRENT_TIMESTAMP
+            """)
+    List<User> findUsersByExpiredToken();
 }
