@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Verifiziere deine Email</title>
+    <style>
+        @media screen and (max-width: 600px) {
+            .content-table {
+                width: 100% !important;
+            }
+        }
+    </style>
+</head>
+
+<body style="margin: 0; padding: 0; background-color: #f4f4f4;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+        <tr>
+            <td align="center">
+                <table class="content-table" width="600" cellspacing="0" cellpadding="0" border="0"
+                    style="background-color: #ffffff;">
+                    <tr>
+                        <td style="padding: 20px; font-family: Arial, sans-serif;">
+                            <img src="/backend/src/main/resources/static/chef-hat.png" alt="Logo" width="50" height="50">
+                            <h1>Herzlich Wilkommen {username} bei Cookshare</h1>
+                            <p>Bestätige deine Registrierung, indem du auf den folgenden Link klickst {Link}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

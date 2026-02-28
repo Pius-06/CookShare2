@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import de.pius.cookshare.DTO.image.ImageRequestDTO;
+import de.pius.cookshare.dto.image.ImageRequestDTO;
 import de.pius.cookshare.model.Image;
 
 @Component

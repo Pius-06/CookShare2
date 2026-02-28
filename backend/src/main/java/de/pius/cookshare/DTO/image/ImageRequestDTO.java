@@ -1,4 +1,4 @@
-package de.pius.cookshare.DTO.image;
+package de.pius.cookshare.dto.image;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

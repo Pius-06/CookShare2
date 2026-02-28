@@ -1,4 +1,4 @@
-package de.pius.cookshare.DTO.userDTO;
+package de.pius.cookshare.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ public record UserRequestDTO(
     @NotBlank(message = "Username can not be empty")
     @Size(min = 4, message = "Username must be at least 4 letters long")
     @Size(max = 20, message = "Username can only be a maximum of 20 letters")
-    String username, // TODO: validation in Security ob username schon existiert
+    String username, 
 
     @NotBlank(message = "Firstname can not be empty")
     @Size(max = 200, message = "Firstname can only be a maximum of 200 letters")
@@ -24,7 +24,7 @@ public record UserRequestDTO(
 
     @NotBlank(message = "Email can not be empty")
     @Email(message = "Email must conform to the email format")
-    String email, // TODO: validation in Security ob email schon existiert
+    String email, 
 
     @NotBlank(message = "Password can not be empty")
     @Size(min = 8, message = "Password must be at least 8 letters long")
@@ -43,12 +43,4 @@ public record UserRequestDTO(
     @Size(max = 200, message = "Bio can only be a maximum of 200 letters long")
     String bio
 ) {
-    public boolean isEmpty() {
-        return username == null &&
-               firstname == null &&
-               lastname == null &&
-               email == null &&
-               password == null &&
-               bio == null;
-    }
 }

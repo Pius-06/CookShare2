@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import de.pius.cookshare.DTO.recipeDTO.ingredientDTO.IngredientRequestDTO;
-import de.pius.cookshare.model.Ingredient;
+import de.pius.cookshare.dto.recipe.ingredientDTO.IngredientRequestDTO;
+import de.pius.cookshare.model.recipe.Ingredient;
 
 @Component
 public class IngredientMapper {

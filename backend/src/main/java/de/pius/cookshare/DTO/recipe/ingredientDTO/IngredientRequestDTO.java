@@ -1,4 +1,4 @@
-package de.pius.cookshare.DTO.recipeDTO.ingredientDTO;
+package de.pius.cookshare.dto.recipe.ingredientDTO;
 
 import de.pius.cookshare.types.IngredientUnit;
 

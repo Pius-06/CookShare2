@@ -1,4 +1,4 @@
-package de.pius.cookshare.model;
+package de.pius.cookshare.model.recipe;
 
 import de.pius.cookshare.types.IngredientUnit;
 import jakarta.persistence.Column;
@@ -8,7 +8,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +22,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString() 
+@ToString()
 @Entity
 public class Ingredient {
 
@@ -38,4 +39,8 @@ public class Ingredient {
 
     @Column(nullable = false, length = 50)
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 }

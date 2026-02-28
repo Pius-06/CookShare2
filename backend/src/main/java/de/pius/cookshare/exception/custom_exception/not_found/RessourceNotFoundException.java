@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 import de.pius.cookshare.exception.ApiException;
 
-public class RessourceNotFoundException extends ApiException {
+public abstract class RessourceNotFoundException extends ApiException {
 
     protected static final HttpStatus STATUS = HttpStatus.NOT_FOUND;
 
@@ -14,7 +14,6 @@ public class RessourceNotFoundException extends ApiException {
             String resourceName,
             String field,
             String value) {
-
         super(
             resourceName.toUpperCase() + "_NOT_FOUND",
             String.format("%s with %s '%s' not found", resourceName, field, value),

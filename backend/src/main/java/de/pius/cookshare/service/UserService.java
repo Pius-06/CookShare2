@@ -1,21 +1,27 @@
 package de.pius.cookshare.service;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.pius.cookshare.DTO.userDTO.UserRequestDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import de.pius.cookshare.dto.auth.RegisterRequestDTO;
+import de.pius.cookshare.dto.user.UserRequestDTO;
 import de.pius.cookshare.exception.custom_exception.conflict.UserAlreadyExistsException;
 import de.pius.cookshare.exception.custom_exception.not_found.UserNotFoundException;
-import de.pius.cookshare.mapper.UserMapper;
-import de.pius.cookshare.model.User;
+import de.pius.cookshare.mapper.AuthMapper;
+import de.pius.cookshare.model.user.User;
 import de.pius.cookshare.repository.UserRepository;
+
 import jakarta.transaction.Transactional;
 
+@Service
 public class UserService {
 
     private UserRepository userRepository;
 
+    @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -31,8 +37,8 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
     }
 
-    public User createUser(UserRequestDTO userData) {
-        User user = UserMapper.toUser(userData);
+    public User createUser(RegisterRequestDTO userData) {
+        User user = AuthMapper.toUser(userData);
 
         checkUsernameAvailable(user.getUsername());
         checkEmailAvailable(user.getEmail());
@@ -43,12 +49,20 @@ public class UserService {
     @Transactional
     public User updateUser(Long userId, UserRequestDTO userData) {
         checkIdlAvailable(userId);
-        
+        // kein passwort ändern lassen können
         return null;
     }
 
     public User deleteUser(Long id) {
         return null;
+    }
+
+    @Transactional
+    public void activateAccount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("id", userId.toString()));
+
+        user.setActive(true);
     }
 
     private void checkUsernameAvailable(String username) {

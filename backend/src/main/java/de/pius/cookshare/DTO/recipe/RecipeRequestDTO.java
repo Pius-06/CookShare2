@@ -1,10 +1,10 @@
-package de.pius.cookshare.DTO.recipeDTO;
+package de.pius.cookshare.dto.recipe;
 
 import java.util.Set;
 
-import de.pius.cookshare.DTO.image.ImageRequestDTO;
-import de.pius.cookshare.DTO.recipeDTO.cookDurationDTO.CookDurationRequestDTO;
-import de.pius.cookshare.DTO.recipeDTO.ingredientDTO.IngredientRequestDTO;
+import de.pius.cookshare.dto.image.ImageRequestDTO;
+import de.pius.cookshare.dto.recipe.cookDurationDTO.CookDurationRequestDTO;
+import de.pius.cookshare.dto.recipe.ingredientDTO.IngredientRequestDTO;
 import de.pius.cookshare.types.Category;
 import de.pius.cookshare.types.Difficulty;
 

@@ -1,10 +1,10 @@
-package de.pius.cookshare.DTO.userDTO;
+package de.pius.cookshare.dto.user;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.pius.cookshare.DTO.recipeDTO.RecipeResponseDTO;
-import de.pius.cookshare.model.User;
+import de.pius.cookshare.dto.recipe.RecipeResponseDTO;
+import de.pius.cookshare.model.user.User;
 import lombok.Builder;
 
 @Builder

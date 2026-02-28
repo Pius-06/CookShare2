@@ -21,7 +21,7 @@ public class ApiException extends RuntimeException {
             HttpStatus status,
             Map<String, Object> details) {
         super(message);
-        this.errorCode = errorCode;
+        this.errorCode = errorCode.replace(" ", "_");
         this.status = status;
         this.timestamp = LocalDateTime.now();
         this.details = details;

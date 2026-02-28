@@ -1,9 +1,9 @@
-package de.pius.cookshare.DTO.recipeDTO.ingredientDTO;
+package de.pius.cookshare.dto.recipe.ingredientDTO;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import de.pius.cookshare.model.Ingredient;
+import de.pius.cookshare.model.recipe.Ingredient;
 import de.pius.cookshare.types.IngredientUnit;
 
 public record IngredientResponseDTO(

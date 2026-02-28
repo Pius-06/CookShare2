@@ -1,4 +1,4 @@
-package de.pius.cookshare.model;
+package de.pius.cookshare.model.recipe;
 
 import de.pius.cookshare.types.DurationUnit;
 

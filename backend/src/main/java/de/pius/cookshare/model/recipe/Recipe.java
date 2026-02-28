@@ -1,16 +1,19 @@
-package de.pius.cookshare.model;
+package de.pius.cookshare.model.recipe;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import de.pius.cookshare.model.Image;
+import de.pius.cookshare.model.user.User;
 import de.pius.cookshare.types.Category;
 import de.pius.cookshare.types.Difficulty;
 
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -35,7 +38,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString() 
+@ToString()
 @Entity
 public class Recipe {
 
@@ -55,13 +58,12 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Image recipeImage;
 
+    @Embedded
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private CookDuration duration;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "recipe_id")
-    private Set<Ingredient> ingridients;
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ingredient> ingredients;
 
     @Column(nullable = false)
     private int servings;
