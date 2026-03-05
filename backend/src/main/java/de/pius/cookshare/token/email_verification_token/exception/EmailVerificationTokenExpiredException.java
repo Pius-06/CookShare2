@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 
 import de.pius.cookshare.exception.ApiException;
 
-public class VerificationTokenExpiredException extends ApiException {
+public class EmailVerificationTokenExpiredException extends ApiException {
 
     private static final String ERROR_CODE = "VERIFICATION_TOKEN_EXPIRED";
 
     private static final HttpStatus STATUS = HttpStatus.GONE;
 
-    public VerificationTokenExpiredException() {
+    public EmailVerificationTokenExpiredException() {
         super(
                 ERROR_CODE,
                 "Verification token has expired",
