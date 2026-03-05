@@ -93,6 +93,51 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Öffentliche JWT-API:
+     Enthält Klassen wie Jwts, Claims, JwtBuilder.
+     Wird zum Erzeugen und Lesen von JWTs verwendet. -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+
+		<!-- Interne Implementierung von jjwt:
+     Macht die eigentliche Arbeit (Signieren, Verifizieren).
+     Ohne diese Dependency gibt es Laufzeitfehler. -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+
+		<!-- JSON-Unterstützung für JWT:
+     Wandelt Claims (Payload) in JSON um und zurück.
+     Nutzt Jackson als JSON-Mapper. -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+
+		<!-- Spring Security Test-Unterstützung:
+     Erlaubt das Mocken von Benutzern, Rollen und Authorities.
+     Sehr nützlich für Security-Tests mit @WithMockUser. -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Spring Security Starter:
+     Aktiviert Spring Security in der Anwendung.
+     Stellt FilterChain, AuthenticationManager,
+     SecurityContext, PasswordEncoder usw. bereit.
+     OHNE diese Dependency funktioniert keine SecurityConfig. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
