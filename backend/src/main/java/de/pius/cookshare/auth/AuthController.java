@@ -4,11 +4,12 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.pius.cookshare.auth.dto.AuthRequest;
+import de.pius.cookshare.auth.dto.AuthResponse;
 import de.pius.cookshare.auth.dto.RegisterRequestDTO;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +27,10 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PutMapping("/login")
-    public ResponseEntity<?> login() {
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest authRequest) {
 
-        return null;
+        return ResponseEntity.ok(authService.login(authRequest));
     }
 
     @PostMapping("/register")

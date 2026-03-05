@@ -3,7 +3,7 @@ package de.pius.cookshare.user;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import de.pius.cookshare.auth.AuthMapper;
@@ -16,13 +16,16 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public Set<User> getAllUser() {
         return userRepository.findAll()
                 .stream()
@@ -34,12 +37,20 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
     }
 
-    public User createUser(RegisterRequestDTO userData) {
-        User user = AuthMapper.toUser(userData);
+    public User getUser(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("email", email.toString()));
+    }
+
+    @Transactional
+    public User createUser(RegisterRequestDTO dto) {
+        User user = AuthMapper.toUser(dto);
 
         checkUsernameAvailable(user.getUsername());
         checkEmailAvailable(user.getEmail());
 
+        user.setPassword(passwordEncoder.encode(dto.password()));
+        user.setRole(Role.USER);
         return userRepository.save(user);
     }
 

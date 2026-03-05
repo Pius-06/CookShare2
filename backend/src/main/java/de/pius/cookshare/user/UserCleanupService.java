@@ -2,7 +2,6 @@ package de.pius.cookshare.user;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserCleanupService {
     private UserRepository userRepository;
 
-    @Autowired
     public UserCleanupService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

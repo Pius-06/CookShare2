@@ -1,72 +1,59 @@
 package de.pius.cookshare.auth;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import de.pius.cookshare.auth.dto.AuthRequest;
+import de.pius.cookshare.auth.dto.AuthResponse;
 import de.pius.cookshare.auth.dto.RegisterRequestDTO;
+import de.pius.cookshare.token.jwt_token.JwtService;
 import de.pius.cookshare.email.EmailService;
-import de.pius.cookshare.token.email_verification_token.VerificationToken;
-import de.pius.cookshare.token.email_verification_token.VerificationTokenRepository;
-import de.pius.cookshare.token.email_verification_token.exception.VerificationTokenAlreadyUsed;
-import de.pius.cookshare.token.email_verification_token.exception.VerificationTokenExpiredException;
-import de.pius.cookshare.token.email_verification_token.exception.VerificationTokenNotFoundException;
+import de.pius.cookshare.token.refresh_token.RefreshTokenService;
 import de.pius.cookshare.user.User;
 import de.pius.cookshare.user.UserService;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class AuthService {
 
     private final UserService userService;
     private final EmailService emailService;
-    private final VerificationTokenRepository tokenRepository;
+    private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    public AuthService(
-            UserService userService,
-            EmailService emailService,
-            VerificationTokenRepository tokenRepository) {
-        this.userService = userService;
-        this.emailService = emailService;
-        this.tokenRepository = tokenRepository;
-    }
+    @Transactional
+    public AuthResponse login(AuthRequest authRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authRequest.email(),
+                        authRequest.password()));
 
-    // TODO: Wann Transactional auch hier?
-    public void login(String email, String password) {
-        
+        User user = (User) authentication.getPrincipal();
+
+        // Alte Refresh Tokens werden ungültig gemacht
+        refreshTokenService.deleteUserRefreshTokens(user);
+
+        String jwt = jwtService.generateToken(user);
+        String refreshToken = refreshTokenService.generateRefreshToken(user);
+
+        return new AuthResponse(jwt, refreshToken);
     }
 
     @Transactional // ???
     public void register(RegisterRequestDTO dto) {
         User user = userService.createUser(dto);
-
-        String token = UUID.randomUUID().toString();
-
-        VerificationToken verificationToken = VerificationToken.builder()
-                .token(token)
-                .user(user)
-                .expiresAt(LocalDateTime.now().plusDays(1))
-                .build();
-
-        tokenRepository.save(verificationToken);
-
-        emailService.sendVerificationEmail(user.getEmail(), token);
+        emailService.createAndSendToken(user);
     }
 
     public void verifyEmail(String token) {
-        VerificationToken verificationToken = tokenRepository
-                .findByToken(token)
-                .orElseThrow(() -> new VerificationTokenNotFoundException("token", token));
-
-        if(verificationToken.isExpired()) throw new VerificationTokenExpiredException();
-        if(verificationToken.isUsed()) throw new VerificationTokenAlreadyUsed();
-
-        verificationToken.markAsUsed();
-        Long userId = verificationToken.getUser().getId();
-        userService.activateAccount(userId);
-        tokenRepository.delete(verificationToken);
+        emailService.verifyEmail(token);
     }
+
+    
 }
