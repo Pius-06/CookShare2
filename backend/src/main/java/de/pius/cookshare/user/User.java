@@ -1,13 +1,17 @@
 package de.pius.cookshare.user;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import de.pius.cookshare.image.Image;
 import de.pius.cookshare.recipe.recipe.Recipe;
-import de.pius.cookshare.token.email_verification_token.VerificationToken;
+import de.pius.cookshare.token.email_verification_token.EmailVerificationToken;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,13 +35,13 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = { "password", "verificationToken" }) // password wird ausgeschlossen
-public class User {
+@Builder
+@ToString(exclude = { "password", "verificationToken", "following", "followers", "ownRecipes", "likedRecipes" })
+public class User implements UserDetails {
     // TODO: Profileimage
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,14 +75,9 @@ public class User {
     @Builder.Default
     private boolean isActive = false;
 
-    @Column(nullable = false)
-    @Builder.Default
-    private int failedLoginAttemps = 0;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Builder.Default
-    private RoleName role = RoleName.USER;
+    private Role role;
 
     @ManyToMany
     @JoinTable(name = "user_follows", joinColumns = @JoinColumn(name = "follower_id"), inverseJoinColumns = @JoinColumn(name = "followed_id"))
@@ -92,10 +91,8 @@ public class User {
     )
     private Image profilImage;
 
-    @Transient
     private int countFollowers;
 
-    @Transient
     private int countFollowing;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
@@ -105,20 +102,16 @@ public class User {
     @JoinTable(name = "user_recipe", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "recipe_id"))
     private Set<Recipe> likedRecipes;
 
-    @OneToOne(mappedBy = "user", 
-    cascade = CascadeType.ALL,
-        orphanRemoval = true)
-    private VerificationToken verificationToken;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private EmailVerificationToken verificationToken;
 
-    public int getCountFollowers() {
-        if (followers == null)
-            return 0;
-        return followers.size();
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return role.getAuthorities();
     }
 
-    public int getCountFollowing() {
-        if (following == null)
-            return 0;
-        return following.size();
+    @Override
+    public String getUsername() {
+        return email; 
     }
 }
