@@ -104,7 +104,7 @@ public class User implements UserDetails {
     private Set<Recipe> likedRecipes;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private EmailVerificationToken verificationToken;
+    private EmailVerificationToken emailVerificationToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

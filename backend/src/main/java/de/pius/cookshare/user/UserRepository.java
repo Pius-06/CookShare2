@@ -22,8 +22,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             SELECT u 
             FROM User u
             WHERE u.isActive = false
-            AND u.verificationToken.used = false
-            AND u.verificationToken.expiresAt < CURRENT_TIMESTAMP
+            AND u.emailVerificationToken.used = false
+            AND u.emailVerificationToken.expiresAt < CURRENT_TIMESTAMP
             """)
     List<User> findByExpiredToken();
 }
