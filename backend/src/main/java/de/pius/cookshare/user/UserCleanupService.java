@@ -15,7 +15,7 @@ public class UserCleanupService {
 
     @Transactional
     public int deleteExpiredUsers() {
-        List<User> users = userRepository.findByExpiredToken();
+        List<User> users = userRepository.findAllExpiredUnusedToken();
         users.forEach((user) -> userRepository.delete(user)); 
         return users.size();
     }
