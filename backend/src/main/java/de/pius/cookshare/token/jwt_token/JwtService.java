@@ -12,7 +12,7 @@ import de.pius.cookshare.token.AbstractTokenService;
 @Service
 public class JwtService extends AbstractTokenService {
 
-    private final long EXPIRATION = 1_800_000; // 30min
+    private final long EXPIRATION = 1_800_000*10; // 30min // TODO: *10 nur zu Testzwecken
 
     public String generateToken(UserDetails userDetails) {
         return buildToken(new HashMap<>(), userDetails, EXPIRATION);
