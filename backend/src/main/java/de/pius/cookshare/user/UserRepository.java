@@ -16,6 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
+    boolean existsById(Long id);
+
     boolean existsByUsername(String username);
 
     @Query("""
@@ -26,4 +28,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             AND u.emailVerificationToken.expiresAt < CURRENT_TIMESTAMP
             """)
     List<User> findAllExpiredUnusedToken();
+
+    void deleteById(Long id);
 }

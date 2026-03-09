@@ -17,6 +17,7 @@ import jakarta.transaction.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
@@ -56,19 +57,24 @@ public class UserService {
 
     @Transactional
     public User updateUser(Long userId, UserRequestDTO userData) {
-        checkIdlAvailable(userId);
+        checkIdAvailable(userId);
         // kein passwort ändern lassen können
         return null;
     }
 
-    public User deleteUser(Long id) {
-        return null;
+    @Transactional
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("id", id.toString());
+        }
+
+        userRepository.deleteById(id);
     }
 
     @Transactional
-    public void activateAccount(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("id", userId.toString()));
+    public void activateAccount(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
 
         user.setActive(true);
     }
@@ -85,7 +91,7 @@ public class UserService {
         }
     }
 
-    private void checkIdlAvailable(Long id) {
+    private void checkIdAvailable(Long id) {
         if (userRepository.existsById(id)) {
             throw new UserAlreadyExistsException("id", id.toString());
         }
