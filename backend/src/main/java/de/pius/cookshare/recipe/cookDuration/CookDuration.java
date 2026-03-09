@@ -28,9 +28,4 @@ public class CookDuration {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private DurationUnit unit;
-
-    public static Object stream() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'stream'");
-    }
 }
