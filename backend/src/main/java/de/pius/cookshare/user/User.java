@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import de.pius.cookshare.image.Image;
 import de.pius.cookshare.recipe.recipe.Recipe;
 import de.pius.cookshare.token.email_verification_token.EmailVerificationToken;
-
+import de.pius.cookshare.token.refresh_token.RefreshToken;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,7 +41,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = { "password", "verificationToken", "following", "followers", "ownRecipes", "likedRecipes" })
+@ToString(exclude = { "password", "emailVerificationToken", "following", "followers", "ownRecipes", "likedRecipes" })
 public class User implements UserDetails {
     // TODO: Profileimage
     @Id
@@ -105,6 +105,9 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private EmailVerificationToken emailVerificationToken;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
