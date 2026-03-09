@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import de.pius.cookshare.auth.AuthMapper;
 import de.pius.cookshare.auth.dto.RegisterRequestDTO;
-import de.pius.cookshare.user.dto.UserRequestDTO;
+import de.pius.cookshare.user.dto.UserUpdateDTO;
 import de.pius.cookshare.user.exception.UserAlreadyExistsException;
 import de.pius.cookshare.user.exception.UserNotFoundException;
 import jakarta.transaction.Transactional;
@@ -56,10 +56,19 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(Long userId, UserRequestDTO userData) {
-        checkIdAvailable(userId);
-        // kein passwort ändern lassen können
-        return null;
+    public User updateUser(Long id, UserUpdateDTO userData) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
+
+        if (userData.username() != null && !userData.username().equals(user.getUsername())) {
+            checkUsernameAvailable(userData.username());
+        }
+
+        if (userData.email() != null && !userData.email().equals(user.getEmail())) {
+            checkEmailAvailable(userData.email());
+        }
+
+        return UserMapper.updateUser(userData, user);
     }
 
     @Transactional
@@ -88,12 +97,6 @@ public class UserService {
     private void checkEmailAvailable(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException("email", email);
-        }
-    }
-
-    private void checkIdAvailable(Long id) {
-        if (userRepository.existsById(id)) {
-            throw new UserAlreadyExistsException("id", id.toString());
         }
     }
 }

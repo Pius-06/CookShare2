@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import de.pius.cookshare.user.dto.UserRequestDTO;
 import de.pius.cookshare.user.dto.UserResponseDTO;
-
+import de.pius.cookshare.user.dto.UserUpdateDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -28,7 +28,7 @@ public class UserController {
 
     private final UserService userService; // ??? Dependency Injection
 
-    @GetMapping("")
+    @GetMapping()
     public ResponseEntity<Set<UserResponseDTO>> getAllUser() {
 
         Set<UserResponseDTO> users = UserResponseDTO.from(userService.getAllUser());
@@ -43,9 +43,10 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable("id") Long id,
-            @Valid @RequestBody UserRequestDTO userData) {
+            @Valid @RequestBody UserUpdateDTO userData) {
 
         UserResponseDTO user = UserResponseDTO.from(userService.updateUser(id, userData));
         return new ResponseEntity<UserResponseDTO>(user, HttpStatus.OK);
