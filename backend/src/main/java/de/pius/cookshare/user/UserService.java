@@ -8,22 +8,22 @@ import org.springframework.stereotype.Service;
 
 import de.pius.cookshare.auth.AuthMapper;
 import de.pius.cookshare.auth.dto.RegisterRequestDTO;
-import de.pius.cookshare.user.dto.UserRequestDTO;
+import de.pius.cookshare.user.dto.PasswordUpdateDTO;
+import de.pius.cookshare.user.dto.UserUpdateDTO;
 import de.pius.cookshare.user.exception.UserAlreadyExistsException;
 import de.pius.cookshare.user.exception.UserNotFoundException;
+import de.pius.cookshare.user.exception.password.OldPasswordMismatchException;
+import de.pius.cookshare.user.exception.password.PasswordSameAsOldException;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Set<User> getAllUser() {
@@ -55,20 +55,50 @@ public class UserService {
     }
 
     @Transactional
-    public User updateUser(Long userId, UserRequestDTO userData) {
-        checkIdlAvailable(userId);
-        // kein passwort ändern lassen können
-        return null;
-    }
+    public User updateUser(Long id, UserUpdateDTO userData) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
 
-    public User deleteUser(Long id) {
-        return null;
+        if (userData.username() != null && !userData.username().equals(user.getUsername())) {
+            checkUsernameAvailable(userData.username());
+        }
+
+        if (userData.email() != null && !userData.email().equals(user.getEmail())) {
+            checkEmailAvailable(userData.email());
+        }
+
+        return UserMapper.updateUser(userData, user);
     }
 
     @Transactional
-    public void activateAccount(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("id", userId.toString()));
+    public void updatePassword(Long id, PasswordUpdateDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
+
+        if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
+            throw new OldPasswordMismatchException();
+        }
+
+        if (passwordEncoder.matches(dto.newPassword(), user.getPassword())) {
+            throw new PasswordSameAsOldException();
+        }
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("id", id.toString());
+        }
+
+        userRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void activateAccount(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
 
         user.setActive(true);
     }
@@ -82,12 +112,6 @@ public class UserService {
     private void checkEmailAvailable(String email) {
         if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException("email", email);
-        }
-    }
-
-    private void checkIdlAvailable(Long id) {
-        if (userRepository.existsById(id)) {
-            throw new UserAlreadyExistsException("id", id.toString());
         }
     }
 }

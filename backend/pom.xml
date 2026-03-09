@@ -43,6 +43,20 @@
 			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
 
+		<!-- Tests -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- In-Memory-Datenbank zum Testen, die Daten im RAM speichert<-->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- Test-Unterstützung für Spring Data JPA (nur für Tests) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

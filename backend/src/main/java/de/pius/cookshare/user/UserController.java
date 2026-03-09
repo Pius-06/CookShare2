@@ -4,18 +4,18 @@ import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import de.pius.cookshare.user.dto.UserRequestDTO;
+import de.pius.cookshare.user.dto.PasswordUpdateDTO;
 import de.pius.cookshare.user.dto.UserResponseDTO;
-
+import de.pius.cookshare.user.dto.UserUpdateDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
@@ -26,7 +26,7 @@ public class UserController {
 
     private final UserService userService; // ??? Dependency Injection
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<Set<UserResponseDTO>> getAllUser() {
 
         Set<UserResponseDTO> users = UserResponseDTO.from(userService.getAllUser());
@@ -41,19 +41,31 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<UserResponseDTO> updateUser(
             @PathVariable("id") Long id,
-            @Valid @RequestBody UserRequestDTO userData) {
+            @Valid @RequestBody UserUpdateDTO userData) {
 
         UserResponseDTO user = UserResponseDTO.from(userService.updateUser(id, userData));
         return new ResponseEntity<UserResponseDTO>(user, HttpStatus.OK);
     }
 
+    @PutMapping("/password/{id}")
+    @PreAuthorize("#id == authentication.principal.id")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody PasswordUpdateDTO dto) {
+
+        userService.updatePassword(id, dto);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 
         userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
 }

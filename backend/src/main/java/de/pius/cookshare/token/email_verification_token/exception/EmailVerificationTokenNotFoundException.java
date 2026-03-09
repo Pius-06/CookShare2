@@ -5,7 +5,7 @@ import de.pius.cookshare.exception.custom_exception.not_found.RessourceNotFoundE
 public class EmailVerificationTokenNotFoundException extends RessourceNotFoundException {
 
     public EmailVerificationTokenNotFoundException(String field, String value) {
-        super("verification token", field, value);
+        super("email verification token", field, value);
     }
 
 }

@@ -10,17 +10,17 @@ Dieser Workflow beschreibt den grundlegenden Ablauf für die Zusammenarbeit im T
 - git checkout main
 - git pull origin main
 
-## 3. Neuen Branch erstellen
+## 3. Neuen Branch erstellen und auf Git-Hub pushen
 - git checkout -b BRANCH-NAME
+- git push -u origin pius
 
 ## 4. Änderungen machen und committen
 - git status
 - git add .
 - git commit -m "COMMIT-MESSAGE"
 
-## 5. Branch zu GitHub pushen
-- Beim ersten Push: git push -u origin BRANCH-NAME
-- Danach reicht: git push
+## 5. Commits pushen
+- git push
 
 ## 6. Pull Request erstellen
 - Auf GitHub:
