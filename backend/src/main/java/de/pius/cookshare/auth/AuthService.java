@@ -3,7 +3,6 @@ package de.pius.cookshare.auth;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +14,7 @@ import de.pius.cookshare.email.EmailService;
 import de.pius.cookshare.token.refresh_token.RefreshTokenService;
 import de.pius.cookshare.user.User;
 import de.pius.cookshare.user.UserService;
+
 import lombok.AllArgsConstructor;
 
 @Service
