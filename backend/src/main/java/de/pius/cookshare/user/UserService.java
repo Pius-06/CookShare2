@@ -8,23 +8,22 @@ import org.springframework.stereotype.Service;
 
 import de.pius.cookshare.auth.AuthMapper;
 import de.pius.cookshare.auth.dto.RegisterRequestDTO;
+import de.pius.cookshare.user.dto.PasswordUpdateDTO;
 import de.pius.cookshare.user.dto.UserUpdateDTO;
 import de.pius.cookshare.user.exception.UserAlreadyExistsException;
 import de.pius.cookshare.user.exception.UserNotFoundException;
+import de.pius.cookshare.user.exception.password.OldPasswordMismatchException;
+import de.pius.cookshare.user.exception.password.PasswordSameAsOldException;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Transactional
     public Set<User> getAllUser() {
@@ -69,6 +68,22 @@ public class UserService {
         }
 
         return UserMapper.updateUser(userData, user);
+    }
+
+    @Transactional
+    public void updatePassword(Long id, PasswordUpdateDTO dto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("id", id.toString()));
+
+        if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
+            throw new OldPasswordMismatchException();
+        }
+
+        if (passwordEncoder.matches(dto.newPassword(), user.getPassword())) {
+            throw new PasswordSameAsOldException();
+        }
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+        userRepository.save(user);
     }
 
     @Transactional

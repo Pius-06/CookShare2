@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import de.pius.cookshare.user.dto.PasswordUpdateDTO;
 import de.pius.cookshare.user.dto.UserResponseDTO;
 import de.pius.cookshare.user.dto.UserUpdateDTO;
 import jakarta.validation.Valid;
@@ -47,6 +48,16 @@ public class UserController {
 
         UserResponseDTO user = UserResponseDTO.from(userService.updateUser(id, userData));
         return new ResponseEntity<UserResponseDTO>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("/password/{id}")
+    @PreAuthorize("#id == authentication.principal.id")
+    public ResponseEntity<Void> updatePassword(
+            @PathVariable("id") Long id,
+            @Valid @RequestBody PasswordUpdateDTO dto) {
+
+        userService.updatePassword(id, dto);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
