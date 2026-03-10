@@ -35,15 +35,10 @@ public abstract class AbstractTokenService {
 
     protected Claims extractAllClaims(String jwt) {
         return Jwts
-                // erzeugt ein Objekt, dass Jwt lesen, prüfen und extrahiern kann
                 .parserBuilder()
-                // Mit dem Secret Key soll überprüft werden, ob das Token echt ist
                 .setSigningKey(getSignInKey())
-                // Baut den fertigen Parser
                 .build()
-                // Prüft JWT
                 .parseClaimsJws(jwt)
-                // Holt den Payload-Teil = Claims
                 .getBody();
     }
 

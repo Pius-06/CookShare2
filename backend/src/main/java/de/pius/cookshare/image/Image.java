@@ -31,13 +31,13 @@ public class Image {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String path; // recipes/uuid.jpg
+    private String path; 
 
     @Column(nullable = false, length = 50)
-    private String originalName; // kuchen.jpg
+    private String originalName;
 
     @Column(nullable = false, length = 50)
-    private String contentType; // image/jpeg
+    private String contentType; 
 
     @Column(nullable = false)
     private long size;

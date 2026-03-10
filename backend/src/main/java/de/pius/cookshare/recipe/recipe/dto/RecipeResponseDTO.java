@@ -61,6 +61,6 @@ public record RecipeResponseDTO(
     public static Set<RecipeResponseDTO> from(Set<Recipe> recipes) {
         return recipes.stream()
                 .map(recipe -> from(recipe))
-                .collect(Collectors.toSet()); // ???
+                .collect(Collectors.toSet());
     }
 }

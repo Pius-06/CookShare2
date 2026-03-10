@@ -17,7 +17,7 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Autowired
-    private TestEntityManager entityManager; // Hilfsklasse zum Speichern/Flushen
+    private TestEntityManager entityManager; 
 
     @Test
     void itShouldReturnUserWithExpiredUnusedToken() {

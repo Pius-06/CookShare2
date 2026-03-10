@@ -1,0 +1,8 @@
+# generelle Ignorierliste
+target/
+*.log
+
+# persönliche Dokumente
+docs/Fragen.md
+docs/Git-Team-Workflow.md
+docs/TODO.md

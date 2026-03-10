@@ -34,10 +34,6 @@ public record UserCreateDTO(
             (?=.*[0-9]){1}
             (?=.*[!@#$%^&*]){1}
             ).+$""", message = "Password must contain at least one upercase letter, one number, one special character")
-    // ^: Präfix
-    // $: Ende des Strings
-    // ?=.*: Der String muss irgendwo das Pattern enthalten (?=PATTERN)
-    // .* = beliebige Zeichen, 0 oder mehr
     String password,
 
     @Size(max = 200, message = "Bio can only be a maximum of 200 letters long")

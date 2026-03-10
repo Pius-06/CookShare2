@@ -20,9 +20,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
 
-@Component // Spring erstellt automatisch eine Instanz dieses Filters.
+@Component 
 @RequiredArgsConstructor
-// OncePerRequestFilter: Filter läuft genau einmal pro Request (ideal für JWT).
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -47,7 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Wenn kein JWT gesendet wird => Filter überspringen
         final String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -57,11 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt = authHeader.substring(7);
         final String email = jwtService.extractEmail(jwt);
 
-        /*
-         * 2. Wenn der Benutzer schon authentifiziert ist (z. B. in einem vorherigen
-         * Filter, oder beim Request erneut), braucht man nicht noch einmal zu
-         * authentifizieren.
-         */
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             authenticateUserFromJwt(request, jwt, email);
         }
@@ -72,19 +65,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletRequest request,
             String jwt,
             String email) {
-        // Lädt den Benutzer aus DB
+
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
         if (jwtService.isTokenValid(jwt, userDetails)) {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, // Wer ist eingelogt
-                    null, // Passwort (nicht benötigt da JWT)
-                    userDetails.getAuthorities()); // Was darf der User
+                    userDetails, 
+                    null,
+                    userDetails.getAuthorities()); 
 
-            // Fügt technische Infos hinzu: IP-Adresse, Session-ID und Browser-Info
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            // Ab diesem Moment weiß Spring: "Dieser Request gehört zu User X"
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
     }

@@ -18,8 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString() 
-@Embeddable // Klasse bekommt keine eigene Tabelle sondern, sondern ihre Felder direkt in der Tabelle der verwendenden 
-// Entität gespeichert werden.
+@Embeddable 
 public class CookDuration {
     
     @Column(nullable = false)

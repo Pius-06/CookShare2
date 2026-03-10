@@ -24,7 +24,6 @@ public class LogoutService implements LogoutHandler {
             HttpServletResponse response,
             Authentication authentication) {
 
-        // Refresh-Token löschen
         String value = getCookieValue(request, "refreshToken");
         if (value != null) {
             refreshTokenService.deleteRefreshTokenByName(value);
