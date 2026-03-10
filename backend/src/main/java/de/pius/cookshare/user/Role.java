@@ -28,7 +28,6 @@ public enum Role {
     @Getter
     private final Set<Permission> permissions;
 
-    // ???
     public List<SimpleGrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = getPermissions()
                 .stream()

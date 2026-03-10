@@ -16,7 +16,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL) // Null-Felder nicht anzeigen ???
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
     private LocalDateTime timestamp;
@@ -27,7 +27,6 @@ public class ErrorResponse {
     private String errorCode;
     private Map<String, Object> details;
 
-    // Statische Factory-Methode für einfache Erstellung
     public static ErrorResponse of(ApiException ex, String path) {
         return ErrorResponse.builder()
                 .timestamp(ex.getTimestamp())

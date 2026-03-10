@@ -16,7 +16,7 @@ public class RefreshTokenService extends AbstractTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private final long REFRESH_EXPIRATION = 604_800_000; // Tage
+    private final long REFRESH_EXPIRATION = 604_800_000; // 7 Tage
 
     public String generateRefreshToken(User user) {
         String token = buildToken(new HashMap<>(), user, REFRESH_EXPIRATION);
@@ -32,10 +32,6 @@ public class RefreshTokenService extends AbstractTokenService {
         return token;
     }
 
-    /*
-     * Bei neuem Login werden alle Refreshtoken ungültig gemacht, sodass
-     * der User einen neuen bekommen kann und diesen nutzen kann
-     */
     public void deleteUserRefreshTokens(User user) {
         refreshTokenRepository.deleteByUser(user);
     }
@@ -43,14 +39,4 @@ public class RefreshTokenService extends AbstractTokenService {
     public void deleteRefreshTokenByName(String tokenname) {
         refreshTokenRepository.deleteByTokenname(tokenname);
     }
-
-    /*
-    public void revokeRefreshToken(String refreshToken) {
-        RefreshToken validToken = refreshTokenRepository.findByToken(refreshToken)
-                .orElseThrow(() -> new RefreshTokenNotFound("refresh token", refreshToken));
-
-        validToken.setRevoked(true);
-        validToken.setExpiresAt(LocalDateTime.now().minusSeconds(1));
-        refreshTokenRepository.save(validToken);
-    }*/
 }

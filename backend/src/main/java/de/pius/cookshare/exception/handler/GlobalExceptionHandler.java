@@ -13,20 +13,17 @@ import org.springframework.web.context.request.WebRequest;
 import de.pius.cookshare.exception.ApiException;
 import de.pius.cookshare.exception.ErrorResponse;
 
-// ist ein globaler Controller-Helfer. Er gilt für alle Controller an einer zentralen Stelle
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final String VALIDATION_ERROR_CODE = "VALIDATION_ERROR";
 
-    // Wenn irgendwo in einem Controller eine ApiException geworfen wird, dann rufe
-    // diese Methode auf
+
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ErrorResponse> handleApiException(ApiException ex, WebRequest request) {
 
         ErrorResponse errorResponse = ErrorResponse.of(ex, request.getDescription(false));
-        // .getDescription(false): liefert eine String-Beschreibung der aktuellen
-        // HTTP-Anfrage.
 
         return ResponseEntity
                 .status(ex.getStatus())

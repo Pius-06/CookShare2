@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping(path = "/users")
 public class UserController {
 
-    private final UserService userService; // ??? Dependency Injection
+    private final UserService userService; 
 
     @GetMapping()
     public ResponseEntity<Set<UserResponseDTO>> getAllUser() {

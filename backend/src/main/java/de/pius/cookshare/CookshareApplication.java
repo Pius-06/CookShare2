@@ -5,12 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableScheduling // Aktiviert die ganze Scheduling-Infrastruktur und füht @Scheduled-Methoden aus
+@EnableScheduling
 public class CookshareApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CookshareApplication.class, args);
-		System.out.println("Hello World!");
+		System.out.println("Server wurde gestartet!");
 	}
 
 }

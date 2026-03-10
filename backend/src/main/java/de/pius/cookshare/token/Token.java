@@ -50,5 +50,4 @@ public abstract class Token {
         if (isExpired())
             throw new EmailVerificationTokenExpiredException();
     }
-    // ??? jakarta, lombok, jpa, hibernate, springboot
 }

@@ -87,8 +87,8 @@ public class User implements UserDetails {
     @ManyToMany(mappedBy = "following")
     private Set<User> followers;
 
-    @OneToOne(cascade = CascadeType.ALL, // Operationen am Parent werden automatisch auf das Child angewendet
-            orphanRemoval = true // Wenn die Beziehung entfernt wird, wird das Child gelöscht
+    @OneToOne(cascade = CascadeType.ALL,
+            orphanRemoval = true 
     )
     private Image profilImage;
 

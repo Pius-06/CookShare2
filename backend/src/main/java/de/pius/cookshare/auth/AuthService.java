@@ -22,9 +22,13 @@ import lombok.AllArgsConstructor;
 public class AuthService {
 
     private final UserService userService;
+
     private final EmailService emailService;
+
     private final JwtService jwtService;
+
     private final RefreshTokenService refreshTokenService;
+    
     private final AuthenticationManager authenticationManager;
 
     @Transactional
@@ -36,7 +40,6 @@ public class AuthService {
 
         User user = (User) authentication.getPrincipal();
 
-        // Alte Refresh Tokens werden ungültig gemacht
         refreshTokenService.deleteUserRefreshTokens(user);
 
         String jwt = jwtService.generateToken(user);
@@ -45,7 +48,7 @@ public class AuthService {
         return new AuthResponse(jwt, refreshToken);
     }
 
-    @Transactional // ???
+    @Transactional 
     public void register(RegisterRequestDTO dto) {
         User user = userService.createUser(dto);
         emailService.createAndSendToken(user);
