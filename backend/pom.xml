@@ -50,7 +50,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- In-Memory-Datenbank zum Testen, die Daten im RAM speichert<-->
+		<!-- In-Memory-Datenbank zum Testen, die Daten im RAM speichert -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
