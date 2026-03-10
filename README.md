@@ -117,6 +117,10 @@ Das Projekt befindet sich aktuell noch in Entwicklung.
     - Recipes
 - Sicherheit 
 - Grundlegende Frontend‑Struktur
+<<<<<<< HEAD
+=======
+Mock‑Logik in Contexts implementiert (Rezepte, Auth).
+>>>>>>> 17be25a2bffca61f8eaec0ff78a0c2692987e4c5
 - Repository‑Tests für User
 - Benutzerregistrierung & Login (JWT)
 - Logout

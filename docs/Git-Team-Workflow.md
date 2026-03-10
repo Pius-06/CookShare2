@@ -12,7 +12,7 @@ Dieser Workflow beschreibt den grundlegenden Ablauf für die Zusammenarbeit im T
 
 ## 3. Neuen Branch erstellen und auf Git-Hub pushen
 - git checkout -b BRANCH-NAME
-- git push -u origin pius
+- git push -u origin BRANCH-NAME
 
 ## 4. Änderungen machen und committen
 - git status
@@ -39,7 +39,8 @@ Dieser Workflow beschreibt den grundlegenden Ablauf für die Zusammenarbeit im T
 - Remote löschen (auf GitHub): git push origin --delete feature-name
 
 ## 9. Neues Feature starten
-- git checkout -b NEW-BRANCH-NAME
+- git checkout -b BRANCH-NAME
+- git push -u origin BRANCH-NAME
 Dann beginnt der Workflow wieder bei Schritt 4.
 
 ## Nützliche Befehle
