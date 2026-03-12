@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-    Set<Recipe> findByAuthorId(Long authorId);
+    Page<Recipe> findByAuthorId(Long authorId);
 
     @Query("""
             SELECT r
@@ -19,7 +19,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
             WHERE r.authorId = ?1
             AND r.isPublic = true
             """)
-    Set<Recipe> findPublicRecipesByAuthorId(Long authorId);
+    Page<Recipe> findPublicRecipesByAuthorId(Long authorId);
 
     Page<Recipe> findAll(Pageable pageable);
 }

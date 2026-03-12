@@ -17,16 +17,14 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
 
-    public Set<Recipe> getRecipesByUserId(Long userId) {
-        return recipeRepository.findPublicRecipesByAuthorId(userId)
-                .stream()
-                .collect(Collectors.toSet());
+    public Page<RecipeResponseDTO> getRecipesByUserId(Long userId, Pageable pageable) {
+        Page<Recipe> recipes = recipeRepository.findPublicRecipesByAuthorId(userId);
+        return recipes.map(recipe -> RecipeResponseDTO.from(recipe));
     }
 
-    public Set<Recipe> getOwnRecipes(Long userId) {
-        return recipeRepository.findByAuthorId(userId)
-                .stream()
-                .collect(Collectors.toSet());
+    public Page<RecipeResponseDTO> getOwnRecipes(Long userId, Pageable pageable) {
+        Page<Recipe> recipes = recipeRepository.findByAuthorId(userId);
+        return recipes.map(recipe -> RecipeResponseDTO.from(recipe));
     }
 
     public Page<RecipeResponseDTO> getAllRecipes(
