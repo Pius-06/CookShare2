@@ -3,8 +3,12 @@ package de.pius.cookshare.recipe.recipe;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.boot.data.autoconfigure.web.DataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import de.pius.cookshare.recipe.recipe.dto.RecipeResponseDTO;
+import de.pius.cookshare.recipe.recipe.dto.RecipeSearchRequestDTO;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -13,10 +17,22 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
 
+    public Set<Recipe> getRecipesByUserId(Long userId) {
+        return recipeRepository.findPublicRecipesByAuthorId(userId)
+                .stream()
+                .collect(Collectors.toSet());
+    }
 
     public Set<Recipe> getOwnRecipes(Long userId) {
         return recipeRepository.findByAuthorId(userId)
-        .stream()
-        .collect(Collectors.toSet());
+                .stream()
+                .collect(Collectors.toSet());
+    }
+
+    public Page<RecipeResponseDTO> getAllRecipes(
+            RecipeSearchRequestDTO dto,
+            Pageable pageable) {
+        Page<Recipe> recipes = recipeRepository.findAll(pageable);
+        return recipes.map(recipe -> RecipeResponseDTO.from(recipe));
     }
 }
