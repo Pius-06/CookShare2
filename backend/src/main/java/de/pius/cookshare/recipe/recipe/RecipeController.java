@@ -6,9 +6,7 @@ import de.pius.cookshare.security.CustomUserDetails;
 
 import lombok.AllArgsConstructor;
 
-import java.util.Set;
-
-import org.springframework.boot.data.autoconfigure.web.DataWebProperties.Pageable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,33 +25,44 @@ public class RecipeController {
 
     @GetMapping("/me")
     @PreAuthorize("#id == authentication.principal.id")
-    public ResponseEntity<Set<RecipeResponseDTO>> getOwnRecipes(@AuthenticationPrincipal CustomUserDetails user) {
+    public ResponseEntity<Page<RecipeResponseDTO>> getOwnRecipes(
+            @AuthenticationPrincipal CustomUserDetails user,
+            RecipeSearchRequestDTO dto,
+            Pageable pageable) {
 
-        Set<RecipeResponseDTO> recipes = RecipeResponseDTO.from(
-                recipeService.getOwnRecipes(user.getUser().getId()));
+        Page<RecipeResponseDTO> recipes = recipeService.getOwnRecipes(
+                user.getUser().getId(),
+                dto,
+                pageable);
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("#id == auhthentication.principal.id")
-    public ResponseEntity<Set<RecipeResponseDTO>> getRecipesByUserId(@PathVariable("id") Long id) {
+    @PreAuthorize("#id == authentication.principal.id")
+    public ResponseEntity<Page<RecipeResponseDTO>> getRecipesByUserId(
+            @PathVariable("id") Long id,
+            RecipeSearchRequestDTO dto,
+            Pageable pageable) {
 
-        Set<RecipeResponseDTO> recipes = RecipeResponseDTO.from(recipeService.getRecipesByUserId(id));
+        Page<RecipeResponseDTO> recipes = recipeService.getRecipesByUserId(
+                id,
+                dto,
+                pageable);
         return ResponseEntity.ok(recipes);
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<RecipeResponseDTO>> getAllRecipes(RecipeSearchRequestDTO dto,
+    public ResponseEntity<Page<RecipeResponseDTO>> getAllRecipes(
+            RecipeSearchRequestDTO dto,
             Pageable pageable) {
 
-        return ResponseEntity.ok(recipeService.getAllRecipes(dto, pageable));
+        return ResponseEntity.ok(recipeService.getAllRecipes(
+                dto,
+                pageable));
     }
-
-    
 
     // eigenen rezepte
     // rezepte von anderen
-    // rezepte von allen + filter
     // rezept CRUD
     // pagination
     // filter (queryparameter)

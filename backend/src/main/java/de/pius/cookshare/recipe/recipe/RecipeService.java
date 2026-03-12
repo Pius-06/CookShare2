@@ -1,9 +1,6 @@
 package de.pius.cookshare.recipe.recipe;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.boot.data.autoconfigure.web.DataWebProperties.Pageable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +14,40 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
 
-    public Page<RecipeResponseDTO> getRecipesByUserId(Long userId, Pageable pageable) {
-        Page<Recipe> recipes = recipeRepository.findPublicRecipesByAuthorId(userId);
+    public Page<RecipeResponseDTO> getRecipesByUserId(
+            Long userId,
+            RecipeSearchRequestDTO dto,
+            Pageable pageable) {
+        Page<Recipe> recipes = recipeRepository.findPublicRecipesByAuthorIdAndFilter(
+            userId, 
+            dto.title(),
+            dto.category(),
+            dto.difficulty(),
+            pageable);
         return recipes.map(recipe -> RecipeResponseDTO.from(recipe));
     }
 
-    public Page<RecipeResponseDTO> getOwnRecipes(Long userId, Pageable pageable) {
-        Page<Recipe> recipes = recipeRepository.findByAuthorId(userId);
+    public Page<RecipeResponseDTO> getOwnRecipes(
+            Long userId,
+            RecipeSearchRequestDTO dto,
+            Pageable pageable) {
+        Page<Recipe> recipes = recipeRepository.findByAuthorIdAndFilter(
+            userId, 
+            dto.title(),
+            dto.category(),
+            dto.difficulty(),
+            pageable);
         return recipes.map(recipe -> RecipeResponseDTO.from(recipe));
     }
 
     public Page<RecipeResponseDTO> getAllRecipes(
             RecipeSearchRequestDTO dto,
             Pageable pageable) {
-        Page<Recipe> recipes = recipeRepository.findAll(pageable);
+        Page<Recipe> recipes = recipeRepository.findAllByFilter(
+            dto.title(),
+            dto.category(),
+            dto.difficulty(),
+            pageable);
         return recipes.map(recipe -> RecipeResponseDTO.from(recipe));
     }
 }
