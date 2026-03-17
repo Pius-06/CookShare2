@@ -45,7 +45,7 @@ Um das Projekt lokal auszuführen wird folgendes benötigt:
 
 ## 1. Repository klonen
 ```bash
-git clone https://github.com/USERNAME/cookshare.git
+git clone https://github.com/Pius-06/cookshare.git
 cd cookshare
 ```
 
@@ -80,7 +80,7 @@ http://localhost:8080
 ```bash
 cd frontend
 npm install
-npm start
+npm run dev
 ```
 
 Das Frontend läuft auf:
