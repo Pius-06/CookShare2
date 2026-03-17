@@ -1,12 +1,16 @@
 package de.pius.cookshare.recipe.recipe;
 
+import de.pius.cookshare.recipe.recipe.dto.RecipeRequestDTO;
 import de.pius.cookshare.recipe.recipe.dto.RecipeResponseDTO;
 import de.pius.cookshare.recipe.recipe.dto.RecipeSearchRequestDTO;
 import de.pius.cookshare.security.CustomUserDetails;
-
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 import org.springframework.data.domain.Pageable;
+
+import java.net.URI;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +19,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @AllArgsConstructor
@@ -41,7 +48,7 @@ public class RecipeController {
     @PreAuthorize("#id == authentication.principal.id")
     public ResponseEntity<Page<RecipeResponseDTO>> getRecipesByUserId(
             @PathVariable("id") Long id,
-            RecipeSearchRequestDTO dto,
+            @Valid RecipeSearchRequestDTO dto,
             Pageable pageable) {
 
         Page<RecipeResponseDTO> recipes = recipeService.getRecipesByUserId(
@@ -51,14 +58,29 @@ public class RecipeController {
         return ResponseEntity.ok(recipes);
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<Page<RecipeResponseDTO>> getAllRecipes(
-            RecipeSearchRequestDTO dto,
+            @Valid RecipeSearchRequestDTO dto,
             Pageable pageable) {
 
         return ResponseEntity.ok(recipeService.getAllRecipes(
                 dto,
                 pageable));
+    }
+
+    @PostMapping()
+    public ResponseEntity<RecipeResponseDTO> createRecipe(@Valid @RequestBody RecipeRequestDTO dto) {
+
+        RecipeResponseDTO recipe = recipeService.createRecipe(dto);
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(recipe.id())
+                .toUri();
+
+        return ResponseEntity.created(location)
+                .body(recipe);
     }
 
     // eigenen rezepte

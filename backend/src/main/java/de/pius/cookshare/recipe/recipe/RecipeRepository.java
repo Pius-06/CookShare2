@@ -10,48 +10,47 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
-    @Query("""
-            SELECT r
-            FROM Recipe r
-            WHERE r.authorId = :authorId
-            AND (:title IS NULL OR LOWER(r.title) LIKE LOWER(CONCAT('%', :title, '%')))
-            AND (:category IS NULL OR r.category = :category)
-            AND (:difficulty IS NULL OR r.difficulty = :difficulty)
-            """)
-    Page<Recipe> findByAuthorIdAndFilter(
-            @Param("authorId") Long authorId,
-            @Param("title") String title,
-            @Param("category") Category category,
-            @Param("difficulty") Difficulty difficulty,
-            Pageable pageable);
-
-    @Query("""
-            SELECT r
-            FROM Recipe r
-            WHERE r.authorId = :authorId
-            AND r.isPublic = true
-            AND (:title IS NULL OR LOWER(r.title) LIKE LOWER(CONCAT('%', :title, '%')))
-            AND (:category IS NULL OR r.category = :category)
-            AND (:difficulty IS NULL OR r.difficulty = :difficulty)
+        @Query("""
+                        SELECT r
+                        FROM Recipe r
+                        WHERE r.author.id = :authorId
+                        AND (:title IS NULL OR LOWER(r.title) LIKE LOWER(CONCAT('%', :title, '%')))
+                        AND (:category IS NULL OR r.category = :category)
+                        AND (:difficulty IS NULL OR r.difficulty = :difficulty)
                         """)
-    Page<Recipe> findPublicRecipesByAuthorIdAndFilter(
-            @Param("authorId") Long authorId,
-            @Param("title") String title,
-            @Param("category") Category category,
-            @Param("difficulty") Difficulty difficulty,
-            Pageable pageable);
+        Page<Recipe> findByAuthorIdAndFilter(
+                        @Param("authorId") Long authorId,
+                        @Param("title") String title,
+                        @Param("category") Category category,
+                        @Param("difficulty") Difficulty difficulty,
+                        Pageable pageable);
 
-    @Query("""
-            SELECT r
-            FROM Recipe r
-            WHERE (:title IS NULL OR LOWER(r.title) LIKE LOWER(CONCAT('%', :title, '%')))
-            AND (:category IS NULL OR r.category = :category)
-            AND (:difficulty IS NULL OR r.difficulty = :difficulty)
-            """)
-    Page<Recipe> findAllByFilter(
-            @Param("title") String title,
-            @Param("category") Category category,
-            @Param("difficulty") Difficulty difficulty,
-            Pageable pageable);
+        @Query("""
+                        SELECT r
+                        FROM Recipe r
+                        WHERE r.author.id = :authorId
+                        AND r.isPublic = true
+                        AND (:title IS NULL OR LOWER(r.title) LIKE LOWER(CONCAT('%', :title, '%')))
+                        AND (:category IS NULL OR r.category = :category)
+                        AND (:difficulty IS NULL OR r.difficulty = :difficulty)
+                                    """)
+        Page<Recipe> findPublicRecipesByAuthorIdAndFilter(
+                        @Param("authorId") Long authorId,
+                        @Param("title") String title,
+                        @Param("category") Category category,
+                        @Param("difficulty") Difficulty difficulty,
+                        Pageable pageable);
 
+        @Query("""
+                        SELECT r
+                        FROM Recipe r
+                        WHERE (:title IS NULL OR LOWER(r.title) LIKE LOWER(CONCAT('%', :title, '%')))
+                        AND (:category IS NULL OR r.category = :category)
+                        AND (:difficulty IS NULL OR r.difficulty = :difficulty)
+                        """)
+        Page<Recipe> findAllByFilter(
+                        @Param("title") String title,
+                        @Param("category") Category category,
+                        @Param("difficulty") Difficulty difficulty,
+                        Pageable pageable);
 }
